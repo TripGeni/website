@@ -28,7 +28,7 @@ const CustomButton = ({
       aria-label={ariaLabel || label}
     >
       <div className={`bg-gray-950 px-6 py-3 rounded-[calc(3rem-1px)] relative z-10 flex justify-center items-center ${buttonColor}`}>
-      <span className={`text-white ${labelStyle}`}>{label}</span>
+      <span className={`${labelStyle}`}>{label}</span>
       </div>
     </button>
   );
@@ -50,7 +50,7 @@ CustomButton.defaultProps = {
   disabled: false,
   ariaLabel: "",
   buttonStyle: "",
-  labelStyle: "", // Allow passing custom label styles (like "font-bold")
+  labelStyle: "text-gray-950 !important",
   buttonColor: "",
 };
 

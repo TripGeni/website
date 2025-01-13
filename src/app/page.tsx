@@ -76,7 +76,7 @@ export default function Home() {
           <CustomButton
             label="Get early access"
             ariaLabel="Get early access"
-            labelStyle="font-[600] text-gray-950 text-[12px] md:text-[12px] lg:text-[13px] xl:text-[16px]"
+            labelStyle="font-[600] text-black !important text-[12px] md:text-[12px] lg:text-[13px] xl:text-[16px]"
             buttonStyle="md:w-auto w-full p-[1.8px] md:p-[2px] md:p-[2.2px] xl:p-[2.5px]"
             buttonColor="bg-white"
           />
