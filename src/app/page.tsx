@@ -17,16 +17,25 @@ const emailValidationSchema = Yup.object().shape({
 export default function Home() {
   const [responseData, setResponseData] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  // const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleFormSubmit = async (values: { email: string }) => {
-    // setError(null);
+  const handleFormSubmit = async (
+    values: { email: string },
+    {
+      resetForm,
+    }: {
+      resetForm: (nextState?: Partial<{ values: { email: string } }>) => void;
+    }
+  ) => {
+    setError(null);
     setLoading(true);
-    console.log({ values });
 
     try {
       const data = await sendWaitlistEmail(values.email);
       setResponseData(data);
+      resetForm();
+    } catch (error) {
+      setError((error as Error).message);
     } finally {
       setLoading(false);
     }
@@ -83,11 +92,13 @@ export default function Home() {
       </div>
 
       {/* Email waitlist */}
-      <div className="mt-10 md:mt-10 xl:mt-16 md:px-20 px-4 lg:px-[10em] xl:px-[12em]">
+      <div className="mt-10 md:mt-10 xl:mt-16 md:px-20 px-4 lg:px-[10em] 2xl:px-[26em]">
         <Formik
           initialValues={{ email: "" }}
           validationSchema={emailValidationSchema}
-          onSubmit={handleFormSubmit}
+          onSubmit={(values, { resetForm }) =>
+            handleFormSubmit(values, { resetForm })
+          }
         >
           {({ handleSubmit, errors }) => (
             <form onSubmit={handleSubmit}>
@@ -115,22 +126,23 @@ export default function Home() {
                   onClick={handleSubmit}
                 />
               </div>
-              {errors && <CustomToast message={errors.email} />}
-              {/* <ErrorMessage
-                name="email"
-                component="div"
-                className="text-red-500 text-sm mt-2"
-              /> */}
+              {errors && (
+                <CustomToast title="Info" message={errors.email} type="info" />
+              )}
+              {error && (
+                <CustomToast title="Error" message={error} type="error" />
+              )}
             </form>
           )}
         </Formik>
 
-        {
-          responseData &&
-            (console.log({ responseData }),
-            (<CustomToast message={responseData} />))
-          // <p>Response: {JSON.stringify(responseData, null, 2)}</p>
-        }
+        {responseData && (
+          <CustomToast
+            title="Yay! You're on the waitlist🥳"
+            message="Check your mail for more information"
+            type="success"
+          />
+        )}
       </div>
 
       {/* Sticky Text at the Bottom */}

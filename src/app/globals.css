@@ -20,3 +20,36 @@ body {
   background: var(--background);
   font-family: "Poppins", sans-serif;
 }
+
+/* Add this CSS in your global styles or a specific CSS file */
+
+/* General toast container customization */
+.Toastify__toast-container {
+  max-width: 90%; /* Limit the width to 90% of the viewport */
+  margin: 0 auto; /* Center the toast */
+}
+
+.Toastify__toast {
+  border-radius: 10px;
+  height: 7em;
+  font-size: 12px; 
+}
+
+/* Customize the toast message on smaller screens */
+@media (max-width: 600px) {
+  .Toastify__toast {
+    font-size: 12px; /* Smaller font size for mobile */
+    padding: 10px 20px; /* Adjust padding for a more compact design */
+    max-width: 80%;
+    margin-top: 2em; /* Ensure it doesn't span the full width */
+    margin-right: -1.5em;
+  }
+
+  .Toastify__toast-body {
+    word-break: break-word; /* Prevent overflow of long messages */
+  }
+
+  .Toastify__progress-bar {
+    height: 5px; /* Adjust progress bar height */
+  }
+}

@@ -31,13 +31,12 @@ export const sendWaitlistEmail = async (email: string): Promise<string> => {
     }
 
     const res = response.data.message;
-    console.log({ res });
 
     return res;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
       const errorMessage = error.response.data?.message || "Unknown error";
-      return errorMessage;
+      throw new Error(errorMessage);
     }
 
     throw error;
