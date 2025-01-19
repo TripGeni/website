@@ -5,8 +5,8 @@ import CustomInput from "@/components/CustomInputfied";
 import CustomToast from "@/components/CustomToast";
 import { useState } from "react";
 import * as Yup from "yup";
-import { Formik, Field, ErrorMessage, FieldProps } from "formik";
-import { sendWaitlistEmail, WaitlistResponse } from "@/api/waitlist";
+import { Formik, Field, FieldProps } from "formik";
+import { sendWaitlistEmail } from "@/api/waitlist";
 
 const emailValidationSchema = Yup.object().shape({
   email: Yup.string()
@@ -17,18 +17,16 @@ const emailValidationSchema = Yup.object().shape({
 export default function Home() {
   const [responseData, setResponseData] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // const [error, setError] = useState<string | null>(null);
 
   const handleFormSubmit = async (values: { email: string }) => {
-    setError(null);
+    // setError(null);
     setLoading(true);
     console.log({ values });
 
     try {
       const data = await sendWaitlistEmail(values.email);
       setResponseData(data);
-    } catch (err) {
-      setError((err as Error).message || "An error occurred");
     } finally {
       setLoading(false);
     }
@@ -91,7 +89,7 @@ export default function Home() {
           validationSchema={emailValidationSchema}
           onSubmit={handleFormSubmit}
         >
-          {({ handleSubmit, values, errors, touched }) => (
+          {({ handleSubmit, errors }) => (
             <form onSubmit={handleSubmit}>
               <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-4 space-x-0">
                 <Field name="email">
