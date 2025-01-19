@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { MoonLoader } from "react-spinners";
 
 const CustomButton = ({
   label,
@@ -8,6 +9,8 @@ const CustomButton = ({
   buttonStyle,
   labelStyle,
   buttonColor,
+  onClick,
+  loading,
 }: {
   label: string;
   disabled: boolean;
@@ -15,20 +18,32 @@ const CustomButton = ({
   buttonStyle?: string;
   labelStyle?: string;
   buttonColor?: string;
+  onClick?: () => void;
+  loading?: boolean;
 }) => {
-  const handleButtonClick = () => {
-  };
-
   return (
     <button
-      onClick={handleButtonClick}
-      disabled={disabled}
+      onClick={onClick}
+      disabled={disabled || loading}
       className={`relative rounded-full p-1 bg-gradient-to-b from-[#9933CC] to-[#1140A4] cursor-pointer 
-        overflow-hidden shadow-custom-purple ${disabled ? "opacity-50 cursor-not-allowed" : ""} ${buttonStyle}`}
+        overflow-hidden shadow-custom-purple ${
+          disabled || loading ? "opacity-50 cursor-not-allowed" : ""
+        } ${buttonStyle}`}
       aria-label={ariaLabel || label}
     >
-      <div className={`bg-gray-950 px-6 py-3 rounded-[calc(3rem-1px)] relative z-10 flex justify-center items-center ${buttonColor}`}>
-      <span className={`${labelStyle}`}>{label}</span>
+      <div
+        className={`px-6 py-3 rounded-[calc(3rem-1px)] relative z-10 flex justify-center items-center transition-colors ${
+          loading ? "bg-white" : "bg-gray-950"
+        } ${buttonColor}`}
+      >
+        <span className={`${labelStyle} ${loading ? "opacity-0" : ""}`}>
+          {label}
+        </span>
+        {loading && (
+          <div className="absolute inset-0 flex justify-center items-center">
+            <MoonLoader size={16} color="#6B7280" />{" "}
+          </div>
+        )}
       </div>
     </button>
   );

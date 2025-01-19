@@ -2,13 +2,36 @@
 import Image from "next/image";
 import CustomButton from "@/components/CustomButton";
 import CustomInput from "@/components/CustomInputfied";
+import CustomToast from "@/components/CustomToast";
 import { useState } from "react";
+import * as Yup from "yup";
+import { Formik, Field, ErrorMessage, FieldProps } from "formik";
+import { sendWaitlistEmail, WaitlistResponse } from "@/api/waitlist";
+
+const emailValidationSchema = Yup.object().shape({
+  email: Yup.string()
+    .email("Invalid email format")
+    .required("Email is required"),
+});
 
 export default function Home() {
-  const [value, setValue] = useState("");
+  const [responseData, setResponseData] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value);
+  const handleFormSubmit = async (values: { email: string }) => {
+    setError(null);
+    setLoading(true);
+    console.log({ values });
+
+    try {
+      const data = await sendWaitlistEmail(values.email);
+      setResponseData(data);
+    } catch (err) {
+      setError((err as Error).message || "An error occurred");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -63,24 +86,53 @@ export default function Home() {
 
       {/* Email waitlist */}
       <div className="mt-10 md:mt-10 xl:mt-16 md:px-20 px-4 lg:px-[10em] xl:px-[12em]">
-        <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-4 space-x-0">
-          <CustomInput
-            type="text"
-            placeholder="Enter email"
-            value={value}
-            onChange={handleInputChange}
-            inputStyle="bg-gray-700 text-white placeholder-gray-400 px-4 py-3 text-[13px] md:px-4 md:py-3 md:text-[12px] lg:px-4 lg:py-[11px] lg:text-[13px] xl:px-6 xl:py-[16px] xl:text-[16px]"
-            wrapperStyle="flex-1 p-[1.8px] md:p-[2px] lg:p-[2.2px] xl:p-[2.5px]"
-          />
+        <Formik
+          initialValues={{ email: "" }}
+          validationSchema={emailValidationSchema}
+          onSubmit={handleFormSubmit}
+        >
+          {({ handleSubmit, values, errors, touched }) => (
+            <form onSubmit={handleSubmit}>
+              <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-4 space-x-0">
+                <Field name="email">
+                  {({ field, form, meta }: FieldProps) => (
+                    <CustomInput
+                      type="email"
+                      placeholder="Enter email"
+                      field={field}
+                      form={form}
+                      meta={meta}
+                      inputStyle="bg-gray-700 text-white placeholder-gray-400 px-4 py-3 text-[13px] md:px-4 md:py-3 md:text-[12px] lg:px-4 lg:py-[11px] lg:text-[13px] xl:px-6 xl:py-[16px] xl:text-[16px]"
+                      wrapperStyle="flex-1 p-[1.8px] md:p-[2px] lg:p-[2.2px] xl:p-[2.5px]"
+                    />
+                  )}
+                </Field>
+                <CustomButton
+                  label="Get early access"
+                  ariaLabel="Get early access"
+                  labelStyle="font-[600] text-black text-[13px] md:text-[12px] lg:text-[13px] xl:text-[16px]"
+                  buttonStyle="md:w-auto w-full p-[1.8px] md:p-[2px] md:p-[2.2px] xl:p-[2.5px]"
+                  buttonColor="bg-white"
+                  loading={loading}
+                  onClick={handleSubmit}
+                />
+              </div>
+              {errors && <CustomToast message={errors.email} />}
+              {/* <ErrorMessage
+                name="email"
+                component="div"
+                className="text-red-500 text-sm mt-2"
+              /> */}
+            </form>
+          )}
+        </Formik>
 
-          <CustomButton
-            label="Get early access"
-            ariaLabel="Get early access"
-            labelStyle="font-[600] text-black !important text-[13px] md:text-[12px] lg:text-[13px] xl:text-[16px]"
-            buttonStyle="md:w-auto w-full p-[1.8px] md:p-[2px] md:p-[2.2px] xl:p-[2.5px]"
-            buttonColor="bg-white"
-          />
-        </div>
+        {
+          responseData &&
+            (console.log({ responseData }),
+            (<CustomToast message={responseData} />))
+          // <p>Response: {JSON.stringify(responseData, null, 2)}</p>
+        }
       </div>
 
       {/* Sticky Text at the Bottom */}
@@ -91,17 +143,17 @@ export default function Home() {
           style={{
             background:
               "linear-gradient(to top, rgba(0, 0, 0, 1), transparent)",
-            zIndex: 1, 
+            zIndex: 1,
           }}
         />
 
         {/* Text */}
         <h2
-          className="text-[190px] md:text-[255px] lg:text-[305px] xl:text-[415px] font-black text-transparent relative z-0" 
+          className="text-[190px] md:text-[255px] lg:text-[305px] xl:text-[415px] font-black text-transparent relative z-0"
           style={{
-            WebkitTextStroke: "0px", 
-            WebkitTextFillColor: "#121212", 
-            color: "transparent", 
+            WebkitTextStroke: "0px",
+            WebkitTextFillColor: "#121212",
+            color: "transparent",
             opacity: 0.2,
             textShadow: `
               1px 1px 0 white, 
