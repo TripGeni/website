@@ -52,7 +52,7 @@ export default function Home() {
             Unlock the magic of AI-powered travel planning
           </h1>
 
-          <p className="text-gray-400 text-[9px] md xl:text-[14px] text-center max-w-[300px] md:max-w-[500px] xl:max-w-[700px] mx-auto mt-4 md:mt-4">
+          <p className="text-gray-400 text-[11px] md xl:text-[14px] text-center max-w-[300px] md:max-w-[500px] xl:max-w-[700px] mx-auto mt-4 md:mt-4">
             Say farewell to traditional agents and let our intelligent AI craft
             your perfect trip to London, Paris, New York, and beyond—seamlessly
             covering every detail from transport, accommodation, to activities,
@@ -62,21 +62,21 @@ export default function Home() {
       </div>
 
       {/* Email waitlist */}
-      <div className="mt-10 md:mt-10 xl:mt-16 md:px-20 px-4 lg:px-[10em] xl:px-[32em]">
+      <div className="mt-10 md:mt-10 xl:mt-16 md:px-20 px-4 lg:px-[10em] xl:px-[12em]">
         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-4 space-x-0">
           <CustomInput
             type="text"
             placeholder="Enter email"
             value={value}
             onChange={handleInputChange}
-            inputStyle="bg-gray-700 text-white placeholder-gray-400 px-4 py-3 text-[11px] md:px-4 md:py-3 md:text-[12px] lg:px-4 lg:py-[11px] lg:text-[13px] xl:px-6 xl:py-[16px] xl:text-[16px]"
+            inputStyle="bg-gray-700 text-white placeholder-gray-400 px-4 py-3 text-[13px] md:px-4 md:py-3 md:text-[12px] lg:px-4 lg:py-[11px] lg:text-[13px] xl:px-6 xl:py-[16px] xl:text-[16px]"
             wrapperStyle="flex-1 p-[1.8px] md:p-[2px] lg:p-[2.2px] xl:p-[2.5px]"
           />
 
           <CustomButton
             label="Get early access"
             ariaLabel="Get early access"
-            labelStyle="font-[600] text-black !important text-[12px] md:text-[12px] lg:text-[13px] xl:text-[16px]"
+            labelStyle="font-[600] text-black !important text-[13px] md:text-[12px] lg:text-[13px] xl:text-[16px]"
             buttonStyle="md:w-auto w-full p-[1.8px] md:p-[2px] md:p-[2.2px] xl:p-[2.5px]"
             buttonColor="bg-white"
           />
